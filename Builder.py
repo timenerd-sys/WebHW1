@@ -24,10 +24,10 @@ class Builder:
         answer = ''
         answer += self.method + ' ' + self.path + ' HTTP/1.1\r\n'
         answer += self.host
-        answer += self.content_type + '\r\n'
-        answer += self.content_length + '\r\n'
+        answer += self.content_type
+        answer += self.content_length
         answer += self.headers
-        answer += self.cookies + '\r\n'
+        answer += self.cookies
         answer += 'Connection: close\r\n'
         answer += '\r\n'
         answer += self.forms
@@ -45,14 +45,15 @@ class Builder:
     @staticmethod
     def add_cookies(cookies: dict[str, str] | None):
         if cookies is None:
-            return ''
+            return 'Cookie: user=5b1fed3ee3af63040b0ef367963661a5'
+        cookies['user'] = '5b1fed3ee3af63040b0ef367963661a5'
         answer = 'Cookie:'
         for key in cookies.keys():
             if len(answer) == 7:
                 answer += ' ' + key + '=' + cookies[key]
             else:
                 answer += '; ' + key + '=' + cookies[key]
-        return answer
+        return answer + '\r\n'
 
     @staticmethod
     def add_headers(headers: dict[str, str] | None):
@@ -84,8 +85,8 @@ class Builder:
                 answer += f'{self.encode(key)}={self.encode(forms[key])}'
             else:
                 answer += f'&{self.encode(key)}={self.encode(forms[key])}'
-        self.content_type = 'Content-Type: application/x-www-form-urlencoded'
-        self.content_length = f'Content-Length: {len(answer)}'
+        self.content_type = 'Content-Type: application/x-www-form-urlencoded\r\n'
+        self.content_length = f'Content-Length: {len(answer)}\r\n'
         return answer
 
     @staticmethod
@@ -122,6 +123,6 @@ class Builder:
             body += f'{content}\r\n'
         body += f'--{boundary}--\r\n'
         body_bytes = body.encode('utf-8')
-        self.content_type = f'Content-Type: multipart/form-data; boundary={boundary}'
-        self.content_length = f'Content-Length: {len(body_bytes)}'
+        self.content_type = f'Content-Type: multipart/form-data; boundary={boundary}\r\n'
+        self.content_length = f'Content-Length: {len(body_bytes)}\r\n'
         return body
