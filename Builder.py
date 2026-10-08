@@ -22,11 +22,12 @@ class Builder:
         self.files_body = self.add_files(data['files'])
 
         answer = ''
-        answer += self.method + ' ' + self.path + ' /HTTP/1.1\r\n'
-        answer += self.content_type
-        answer += self.content_length
+        answer += self.method + ' ' + self.path + ' HTTP/1.1\r\n'
+        answer += self.host
+        answer += self.content_type + '\r\n'
+        answer += self.content_length + '\r\n'
         answer += self.headers
-        answer += self.cookies
+        answer += self.cookies + '\r\n'
         answer += 'Connection: close\r\n'
         answer += '\r\n'
         answer += self.forms

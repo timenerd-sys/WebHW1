@@ -55,6 +55,9 @@ def get_method(soup):
     if 'Перейдите' in text:
         return 'GET'
 
+    if 'Загрузите' in text:
+        return 'POST'
+
     return None
 
 

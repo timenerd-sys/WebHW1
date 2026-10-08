@@ -12,7 +12,7 @@ def receive(sock):
             break
 
         received += part
-
+    sock.close()
     return received
 
 s = socket.create_connection(('hw1.alexbers.com', 80))
@@ -32,10 +32,17 @@ print(html.decode())
 
 while True:
     builder = Builder()
-    s.sendall(bytes(builder.build(parsed_html), 'utf-8'))
+    request = builder.build(parsed_html)
+
+    s = socket.create_connection(('hw1.alexbers.com', 80))
+    s.sendall(bytes(request, 'utf-8'))
+
     message = receive(s)
+    s.close()
+
     response, html = message.split(b'\r\n\r\n', 1)
     parsed_html = HTMLParser.parse(html.decode())
+
     print(response.decode())
     print(html.decode())
     print('----------------------------------------------------------------------------------------')
