@@ -22,6 +22,7 @@ request = (
     b'Host: hw1.alexbers.com\r\n'
     b'Cookie: user=5b1fed3ee3af63040b0ef367963661a5\r\n'
     b'Connection: close\r\n'
+    b'\r\n'
 )
 s.sendall(request)
 
