@@ -11,6 +11,15 @@ class ParseResult(TypedDict):
     cookies: dict[str, str] | None
     forms: dict[str, str] | None
     files: dict[str, str] | None
+    secret: str | None
+
+
+def get_secret(soup):
+    text = soup.get_text()
+    if 'Поздравляем' not in text:
+        return None
+    secret = soup.find('code')
+    return secret.get_text(strip=True)
 
 
 def parse(html):
@@ -23,7 +32,8 @@ def parse(html):
         'params': get_params(soup),
         'cookies': get_cookies(soup),
         'forms': get_forms(soup),
-        'files': get_files(soup)
+        'files': get_files(soup),
+        'secret': get_secret(soup)
     }
 
     return result
@@ -52,7 +62,7 @@ def get_method(soup):
     if 'POST-запрос' in text:
         return 'POST'
 
-    if 'Перейдите' in text:
+    if 'GET-запрос' in text or 'Перейдите' in text:
         return 'GET'
 
     if 'Загрузите' in text:

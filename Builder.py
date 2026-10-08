@@ -45,7 +45,7 @@ class Builder:
     @staticmethod
     def add_cookies(cookies: dict[str, str] | None):
         if cookies is None:
-            return 'Cookie: user=5b1fed3ee3af63040b0ef367963661a5'
+            return 'Cookie: user=5b1fed3ee3af63040b0ef367963661a5\r\n'
         cookies['user'] = '5b1fed3ee3af63040b0ef367963661a5'
         answer = 'Cookie:'
         for key in cookies.keys():

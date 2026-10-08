@@ -31,13 +31,9 @@ message = receive(s)
 response, html = message.split(b'\r\n\r\n', 1)
 parsed_html = HTMLParser.parse(html.decode())
 
-print(response.decode())
-print(html.decode())
-
 while True:
     builder = Builder()
     request = builder.build(parsed_html)
-    print(repr(request))
 
     s = socket.create_connection(('hw1.alexbers.com', 80))
     s.settimeout(5)
@@ -49,6 +45,11 @@ while True:
     response, html = message.split(b'\r\n\r\n', 1)
     parsed_html = HTMLParser.parse(html.decode())
 
-    print(response.decode())
-    print(html.decode())
-    print('----------------------------------------------------------------------------------------')
+    if parsed_html['secret'] is not None:
+        print(parsed_html['secret'])
+        break
+
+    if 'Bad Request' in response.decode():
+        print(response.decode())
+        print(html.decode())
+        break
